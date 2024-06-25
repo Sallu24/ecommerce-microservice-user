@@ -1,10 +1,8 @@
 package com.microservice_ecommerce.user.user;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,9 +23,33 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> view(@PathVariable Long id) {
-        UserResponse productResponse = userService.view(id);
+        UserResponse userResponse = userService.view(id);
 
-        return ResponseEntity.ok(productResponse);
+        return ResponseEntity.ok(userResponse);
+    }
+
+    // route for internal communication
+    @GetMapping("/user-exists/{email}")
+    public ResponseEntity<Boolean> userExistsByEmail(@PathVariable String email) {
+        boolean exists = userService.userExistsByEmail(email);
+
+        return ResponseEntity.ok(exists);
+    }
+
+    // route for internal communication
+    @GetMapping("/user-by-email/{email}")
+    public ResponseEntity<User> userByEmail(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+
+        return ResponseEntity.ok(user);
+    }
+
+    // route for internal communication
+    @PostMapping
+    public ResponseEntity<Void> store(@Valid @RequestBody UserCreationDTO userCreationDTO) {
+        userService.createUser(userCreationDTO);
+
+        return ResponseEntity.created(null).build();
     }
 
 }

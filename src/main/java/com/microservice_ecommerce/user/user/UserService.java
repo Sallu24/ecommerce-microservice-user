@@ -40,12 +40,14 @@ public class UserService {
                 );
     }
 
-    public void userExistsByEmail(String email) {
+    public boolean userExistsByEmail(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isPresent()) {
             throw new UserAlreadyExistsException("User with email " + email + " already exists");
         }
+
+        return false;
     }
 
     public User findByEmail(String email) {
@@ -59,7 +61,7 @@ public class UserService {
         throw new UserAlreadyExistsException("User with email " + email + " already exists");
     }
 
-    public User createUser(UserCreationDTO userCreationDTO, String password) {
+    public void createUser(UserCreationDTO userCreationDTO) {
         User user = new User();
         user.setFirstName(userCreationDTO.getFirst_name());
         user.setLastName(userCreationDTO.getLast_name());
@@ -67,10 +69,7 @@ public class UserService {
         user.setEmail(userCreationDTO.getEmail());
         user.setPhone(userCreationDTO.getPhone());
         user.setPassword(userCreationDTO.getPassword());
-        user.setPassword(password);
         userRepository.save(user);
-
-        return user;
     }
 
     private UserResponse convertToDTO(User user) {
