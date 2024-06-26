@@ -33,6 +33,14 @@ public class UserInternalController {
     }
 
     // route for internal communication
+    @GetMapping("/user-by-id/{id}")
+    public ResponseEntity<User> userById(@PathVariable Long id) {
+        User user = userService.findById(id);
+
+        return ResponseEntity.ok(user);
+    }
+
+    // route for internal communication
     @PostMapping
     public ResponseEntity<Void> store(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         userService.createUser(userCreationDTO);

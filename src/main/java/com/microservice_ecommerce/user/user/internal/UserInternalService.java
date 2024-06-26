@@ -1,9 +1,6 @@
 package com.microservice_ecommerce.user.user.internal;
 
-import com.microservice_ecommerce.user.user.User;
-import com.microservice_ecommerce.user.user.UserAlreadyExistsException;
-import com.microservice_ecommerce.user.user.UserCreationDTO;
-import com.microservice_ecommerce.user.user.UserRepository;
+import com.microservice_ecommerce.user.user.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -35,7 +32,18 @@ public class UserInternalService {
 
         }
 
-        throw new UserAlreadyExistsException("User with email " + email + " already exists");
+        throw new UserNotFoundException("User with email " + email + " already exists");
+    }
+
+    public User findById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+
+        }
+
+        throw new UserNotFoundException("User with id " + id + " not exists");
     }
 
     public void createUser(UserCreationDTO userCreationDTO) {
