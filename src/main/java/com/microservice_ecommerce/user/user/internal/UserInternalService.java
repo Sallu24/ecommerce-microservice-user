@@ -32,7 +32,7 @@ public class UserInternalService {
 
         }
 
-        throw new UserNotFoundException("User with email " + email + " already exists");
+        throw new UserNotFoundException("User with email " + email + " not exists");
     }
 
     public User findById(Long id) {
